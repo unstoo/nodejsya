@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import style from './style.css'
 
-export default class App extends Component {
+export default class ResultContainer extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      status: `error`
+      status: `progress`
     }
   }
   render() {
@@ -13,12 +13,22 @@ export default class App extends Component {
       <div className={style.ResultContainer} style={styleModefier[this.state.status]} id="resultContainer">
         Результат: 
         <span className={style.ResultCodeDisplay}>
-          {`It's a stub.`}
+          It's a stub.
         </span>
       </div>
     )
   }
 }
+
+// this.propsTypes = {
+//   ajaxResponseStatus: {
+//     type: `Object`,
+//     scheme: {
+//       status,
+//       reason
+//     }
+//   }
+// }
 
 const styleModefier = {
   success: {

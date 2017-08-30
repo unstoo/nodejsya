@@ -1,31 +1,17 @@
-/* ТОЛЬКО ИНСАЙД ИН! */
-/* ПОМНИ АНАКИН */
-
-.Layout {
+.InputFieldLayout {
   box-sizing: border-box;
   display: flex;
   flex-wrap: wrap;
-  padding: 8px;
-  border: 2px solid lightgreen;
+  padding-bottom: 12px;
 }
 
-.LayoutLeft {  
-  box-sizing: border-box;
-  padding-right: 8px;
-  min-width: 256px;
+.InputLabel {
+  width: 100px;
+  font-size: 18px;
+  height: 28px;
 }
 
-.LayoutRight {  
-  box-sizing: border-box;
-  padding-left: 12px;
-  border-left: 2px solid lightgreen;
-  min-width: 256px;
-}
-
-@media (max-width: 547px) {
-  .LayoutRight {
-    margin-top: 16px;
-    padding-left: 0px;
-    border-left: none;
-  }
+.InputField {
+  font-size: 18px;
+  width: 100%;
 }

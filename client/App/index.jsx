@@ -1,18 +1,22 @@
 import React, { Component } from 'react'
 import style from './style.css'
-import FormLayout from '../Layout'
+import FormLayout from '../FormLayout'
 import ResultContainer from '../ResultContainer'
-
-const SourceApi = {
-
-}
+import InputField from '../InputField'
+import Button from '../Button'
 
 export default class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      ajaxCallResult: 'none' // pending,error,success 
+      ajaxCallResult: 'none', // none,progress,error,success 
+      formAction: `/api/`,
+      errorFields: []
     }
+  }
+
+  inputFieldCallback(inputFieldName) {
+
   }
 
   composeApiForConsole() {
@@ -20,37 +24,34 @@ export default class App extends Component {
       validate() {},
       getData() {},
       setData(object) {},
-      submit() {}
+      submit() { console.log(this) }
     }
+  }
+
+  buttonClickHandler() {
+    console.info(`buttonClickHandler clicked!`)
+    // check fields validation
+    // if ok do ajax
   }
 
   render() {
     return (
-        <FormLayout>
-          {/* <Form method={} targetUrl={} callback={}>
-            <InputField name={`fio`} type={`fio`} />
-            <InputField name={`email`} type={`email`} />
-            <InputField name={`phone`} type={`phone`}/>
-            <Button/>
-          </Form> */}
-          <form>
-            <div>ФИО <input type="text" name="fio"/></div>
-            <div>Email  <input type="text" name="email"/></div>
-            <div>Телефон -<input type="text" name="phone"/></div>
-            <div><button id="submitButton">Отправтиь</button></div>
-          </form>
-          <ResultContainer ajaxCallResult={`none`} />
-          <script>{ window.MyForm = this.composeApiForConsole() }</script>
-        </FormLayout>
+      <FormLayout>
+        <form action={this.formAction}>
+          <InputField name={`fio`} type={`fio`} label={`ФИО`}/>
+          <InputField name={`email`} type={`email`} label={`Email`}/>
+          <InputField name={`phone`} type={`phone`} label={`Телефон`}/>
+          <Button 
+           buttonClickHandler={this.buttonClickHandler} 
+           makeButtonDisabled={false}>
+            Отправить
+          </Button>
+        </form>
+
+        <ResultContainer ajaxCallResult={this.state.ajaxCallResult} />
+
+        <script>{ window.MyForm = this.composeApiForConsole() }</script>        
+      </FormLayout>
     )
   }
 }
-
-
-
-{/* <ResultContainer/>
- \
-  \______<ResultCodeDisplay/>
-   \
-    \_____<Result */}
-
