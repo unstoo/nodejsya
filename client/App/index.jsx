@@ -4,14 +4,16 @@ import FormLayout from '../FormLayout'
 import ResultContainer from '../ResultContainer'
 import InputField from '../InputField'
 import Button from '../Button'
+import randomApiResponsePicker from '../randomApiStubChoise.js'
 
 export default class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      ajaxCallResult: 'none', // none,progress,error,success 
-      formActionUrl: `/api/`,
+      ajaxFormSubmissionStage: {code: 'none', msg: ''}, // none,progress,error,success 
+      submitFormToUrl: `/api/`,
       enableInputFieldsErrorHiglighting: false,
+      disableFormButton: false,
       inputFields: {
         fio:{ validnessIndicator: false, value: ``},
         email:{ validnessIndicator: false, value: ``},
@@ -51,9 +53,27 @@ export default class App extends Component {
         }
       },
 
-      getData() {},
+      // Метод getData возвращает объект с данными формы, где имена свойств совпадают с именами инпутов
+      getData() {
+        const dataObject = {}
+        console.log('getData()', thisComponent)
+        const {inputFields} = thisComponent.state
+        for(let key in inputFields) {
+          dataObject[key] = inputFields[key].value
+        }
+
+        return dataObject
+      },
       
-      setData(object) {},
+      setData(dataObject) {
+        const { fio, email, phone } = dataObject
+        const stateChunk = Object.assign({}, thisComponent.state.inputFields)
+        stateChunk.fio.value = fio
+        stateChunk.fio.value = email
+        stateChunk.fio.value = phone
+
+        thisComponent.setState({inputFields: stateChunk})
+      },
       
       // Метод submit выполняет валидацию полей и отправку ajax-запроса, 
       // если валидация пройдена. Вызывается по клику на кнопку отправить.
@@ -63,25 +83,43 @@ export default class App extends Component {
     }
   }
 
+
   buttonClickHandler(e) {
-    // There's no event object if the method is invoked in console.
+    // There's no event object if the method is invoked from the console.
     if (e !== undefined) {
       e.preventDefault()
     }
 
     const areInputFieldsValuesValid = this.composeApiForConsole(this).validate().isValid 
 
-    areInputFieldsValuesValid ?
-    () => {
-        console.log(`All set. Launching ajax.`) 
-        // Deactivate Button
-        // Send out ajax
-        // Listen for response
-        // Display response or retry if reponse has timedout.
+    if (areInputFieldsValuesValid) {
+      // Disable submit button; Launch spinner animation;
+      const newState = Object.assign({}, this.state)
+      newState.disableFormButton = true
+      newState.ajaxFormSubmissionStage = {code: 'listening', msg: ''}
+      this.setState(newState)
+
+      // Send data; wait for response; Stop spinner animation;
+      submitFormDataByAjax(this.state.submitFormToUrl, 
+        {
+          fio: newState.inputFields.fio.value,
+          email: newState.inputFields.email.value,
+          phone: newState.inputFields.phone.value,
+        },
+        (response) => {
+          const updatedState = this.state
+          updatedState.ajaxFormSubmissionStage.status = response.status
+          updatedState.ajaxFormSubmissionStage.reason = response.reason || ``
+          
+          this.setState({updatedState})
+        }
+      )
+
+    } else {
+      // Если валидация не прошла, соответствующим инпутам должен добавиться класс error
+      // с заданным стилем border: 1px solid red.    
+      this.setState({enableInputFieldsErrorHiglighting: true})
     }
-    :  this.setState({enableInputFieldsErrorHiglighting: true})
-    // Если валидация не прошла, соответствующим инпутам должен добавиться класс error
-    // с заданным стилем border: 1px solid red.
   }
 
   render() {
@@ -101,12 +139,12 @@ export default class App extends Component {
           
           <Button 
            buttonClickHandler={this.buttonClickHandler} 
-           makeButtonDisabled={false}>
+           makeButtonDisabled={this.state.disableFormButton}>
             Отправить
           </Button>
         </form>
 
-        <ResultContainer ajaxCallResult={this.state.ajaxCallResult} />
+        <ResultContainer ajaxResponse={this.state.ajaxFormSubmissionStage}/>
 
         <script>
           { window.MyForm ? true : window.MyForm = this.composeApiForConsole(this) }
@@ -115,3 +153,34 @@ export default class App extends Component {
     )
   }
 }
+
+
+// a. {"status":"success"} – контейнеру resultContainer должен быть выставлен класс success и добавлено содержимое с текстом "Success"
+// b. {"status":"error","reason":String} - контейнеру resultContainer должен быть выставлен класс error и добавлено содержимое с текстом из поля reason
+// c. {"status":"progress","timeout":Number} - контейнеру resultContainer должен быть выставлен класс progress и через timeout миллисекунд необходимо повторить запрос (логика должна повторяться, пока в ответе не вернется отличный от progress статус)
+const submitFormDataByAjax = (apiUrl, data, callback) => {
+
+  const tryToAjax = () => {
+    const randomApiResponse = `/client/${randomApiResponsePicker()}`
+
+    fetch(randomApiResponse /*, { data } */)
+    .then(response => {
+      return response.json()    
+    }).then(json => {
+
+      const {status} = json      
+      console.info(`AJAX Responded with: `, json)
+      
+      if(status === `progress`) {
+        setTimeout(tryToAjax, json.timeout)
+      }
+
+      if(status === `error`) { callback(json) }
+
+      if(status === `success`) { callback(json) }  
+    })
+  }
+  tryToAjax()
+}
+
+  

@@ -2,33 +2,20 @@ import React, { Component } from 'react'
 import style from './style.css'
 
 export default class ResultContainer extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      status: `progress`
-    }
-  }
+
   render() {
+    const response = this.props.ajaxResponse
     return (    
-      <div className={style.ResultContainer} style={styleModefier[this.state.status]} id="resultContainer">
+      <div className={style.ResultContainer} style={styleModefier[response.status]} id="resultContainer">
         Результат: 
         <span className={style.ResultCodeDisplay}>
-          It's a stub.
+          { response.status }
+          { response.reason ? ` ` + response.reason : `` }
         </span>
       </div>
     )
   }
 }
-
-// this.propsTypes = {
-//   ajaxResponseStatus: {
-//     type: `Object`,
-//     scheme: {
-//       status,
-//       reason
-//     }
-//   }
-// }
 
 const styleModefier = {
   success: {
@@ -41,6 +28,6 @@ const styleModefier = {
     borderBottom: `3px solid silver`
   },
   none: {
-    borderBottom: `3px solid skyblue`
+    borderBottom: `none`
   }
 }
