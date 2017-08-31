@@ -16,9 +16,9 @@ module.exports = {
 
   output: {
     filename: 'bundle.js',
-    path: path.resolve(__dirname, 'bundeled_client'),
+    path: path.resolve(__dirname, 'static-for-devserver'),
     // necessary for HMR to know where to load the hot update chunks.
-    publicPath: '/static/',
+    publicPath: '/',
   },
 
   devtool: 'inline-source-map',
@@ -32,13 +32,16 @@ module.exports = {
     compress: true,
     port: 3000,   
     // to serve static files.
-    // contentBase: path.join(__dirname, 'client'),    
+    contentBase: path.join(__dirname, 'static-for-devserver'),    
     // The bundled files will be available in the browser under this path
-    // publicPath: '/static/',
-    // stats: 'errors-only'
+    publicPath: '/',
   },
 
   plugins: [
+    // Globals for the client surface.
+    new webpack.DefinePlugin({
+      'DEVELOPMENT': JSON.stringify(process.env.NODE_ENV === 'development')
+    }),
     // enable HMR globally
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin(),
@@ -69,7 +72,7 @@ module.exports = {
             loader: 'css-loader',
             options: {
               modules: true,
-              localIdentName: '[name]-[local]-[hash:base64:5]'
+              localIdentName: '[local]_[hash:base64:5]'
             }
           }
         ]

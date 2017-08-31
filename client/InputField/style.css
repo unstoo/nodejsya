@@ -2,16 +2,30 @@
   box-sizing: border-box;
   display: flex;
   flex-wrap: wrap;
-  padding-bottom: 12px;
+  margin-bottom: 16px;
 }
 
 .InputLabel {
-  width: 100px;
+  padding-right: 8px;
   font-size: 18px;
   height: 28px;
+  padding-left: 8px;
+  color: #8f8f8f;
+  border-top: solid 1px silver;
+  border-left: solid 1px silver;
+  border-right: solid 1px silver;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
 }
 
 .InputField {
-  font-size: 18px;
+  box-sizing: border-box;
   width: 100%;
+  padding: 6px;
+  font-size: 17px;
+  height: 42px;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  border-top-right-radius: 3px;
+  border: 1px solid #A4A4A4;
 }

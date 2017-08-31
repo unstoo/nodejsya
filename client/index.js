@@ -4,17 +4,26 @@ import { AppContainer } from 'react-hot-loader'
 import App from './App'
 
 
+let formSubmitApiPoint = `/your/api/point/url`
 
-const rootEl = document.getElementById('root');
+if (DEVELOPMENT === true) {
+  console.log(`yay DEVELOPMENT mode is on`)
+  // Purge API url in order to use json stubs instead.
+  // See tryToAjax() in './App/index.jsx'
+  formSubmitApiPoint = `` 
+}
 
-const render = Component =>
+
+const rootEl = document.getElementById('root')
+
+const render = (Component, formSubmitApiPoint) =>
   ReactDOM.render(
     <AppContainer>
-      <Component />
+      <Component formActionUrl={formSubmitApiPoint} />
     </AppContainer>,
     document.getElementById('root')
   )
 
-render(App)
+render(App, formSubmitApiPoint)
 
-if (module.hot) module.hot.accept('./App', () => render(App))
+if (module.hot) module.hot.accept('./App', () => render(App, formSubmitApiPoint))

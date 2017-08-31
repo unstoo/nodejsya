@@ -7,10 +7,10 @@ export default class ResultContainer extends Component {
     const response = this.props.ajaxResponse
     return (    
       <div className={style.ResultContainer} style={styleModefier[response.status]} id="resultContainer">
-        Результат:&nbsp;
+        Результат:<br/>
         <span className={style.ResultCodeDisplay}>
           { response.status }
-          { response.reason ? ` ` + response.reason : `` }
+          { response.reason ? (` ` + response.reason) : `` }
         </span>
       </div>
     )
@@ -19,13 +19,13 @@ export default class ResultContainer extends Component {
 
 const styleModefier = {
   success: {
-    borderBottom: `3px solid lightgreen`
+    borderBottom: `6px solid lightgreen`
   },
   error: {
-    borderBottom: `3px solid red`
+    borderBottom: `6px solid red`
   },
   progress: {
-    borderBottom: `3px solid black`
+    borderBottom: `6px solid black`
   },
   none: {
     borderBottom: `none`

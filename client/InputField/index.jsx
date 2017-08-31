@@ -45,7 +45,7 @@ export default class InputField extends Component {
     }
 
     return (
-      <div className={style.InputFieldLayout} style={applyStyle}>
+      <div className={style.InputFieldLayout } style={applyStyle}>
         <label className={style.InputLabel}> 
           {this.props.label}
         </label>
@@ -98,7 +98,6 @@ const inputValueTypeCheck = {
       }
     })
     
-    console.log(`fio-test: `, test)
     return test
   },
 

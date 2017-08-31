@@ -6,23 +6,23 @@
   display: flex;
   flex-wrap: wrap;
   padding: 8px;
-  border: 2px solid lightgreen;
 }
 
 .LayoutLeft {  
   box-sizing: border-box;
-  padding-right: 8px;
-  min-width: 256px;
+  padding-right: 14px;
+  width: 296px;
 }
 
 .LayoutRight {  
   box-sizing: border-box;
   padding-left: 12px;
-  border-left: 2px solid lightgreen;
-  min-width: 256px;
+  border-left: 8px solid #ffdb4d;
+  width: 296px;
 }
 
-@media (max-width: 547px) {
+
+@media (max-width: 623px) {
   .LayoutRight {
     margin-top: 16px;
     padding-left: 0px;

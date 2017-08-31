@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import style from './style.css'
 import FormLayout from '../FormLayout'
 import ResultContainer from '../ResultContainer'
 import InputField from '../InputField'
@@ -11,7 +10,7 @@ export default class App extends Component {
     super(props)
     this.state = {
       ajaxFormSubmissionStage: {code: 'none', msg: ''}, // none,progress,error,success 
-      submitFormToUrl: `/api/`,
+      submitFormToUrl: this.props.formActionUrl,
       enableInputFieldsErrorHiglighting: false,
       disableFormButton: false,
       inputFields: {
@@ -133,7 +132,7 @@ export default class App extends Component {
     
     return (
       <FormLayout>
-        <form action={this.actionUrl}>
+        <form action={this.state.submitFormToUrl}>
           <InputField name={`fio`} type={`fio`} label={`ФИО`} value={fields[`fio`].value} {...props} />
           <InputField name={`email`} type={`email`} label={`Email`} value={fields[`email`].value}{...props}/>
           <InputField name={`phone`} type={`phone`} label={`Телефон`} value={fields[`phone`].value} {...props}/>
@@ -160,15 +159,30 @@ export default class App extends Component {
 // b. {"status":"error","reason":String} - контейнеру resultContainer должен быть выставлен класс error и добавлено содержимое с текстом из поля reason
 // c. {"status":"progress","timeout":Number} - контейнеру resultContainer должен быть выставлен класс progress и через timeout миллисекунд необходимо повторить запрос (логика должна повторяться, пока в ответе не вернется отличный от progress статус)
 const submitFormDataByAjax = (apiUrl, data, callback) => {
+  data = Object.keys(data).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key])).join('&')
+
+  const options = {
+    method: 'POST', 
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+    body: data
+  }
 
   const tryToAjax = () => {
-    const randomApiResponse = `/client/${randomApiResponsePicker()}`
-
-    fetch(randomApiResponse /*, { data } */)
+    let fetchMethod
+    // json stubs for testing
+    if(!apiUrl) {   
+      fetchMethod = fetch.bind(null, `/${randomApiResponsePicker()}`)
+    }
+    // production api point
+    if(apiUrl) {
+      fetchMethod = fetch.bind(null, apiUrl, options)
+    }
+    
+    fetchMethod()
     .then(response => {
       return response.json()    
-    }).then(json => {
-
+    })
+    .then(json => {
       const {status} = json      
       console.info(`AJAX Responded with: `, json)
       
@@ -180,6 +194,9 @@ const submitFormDataByAjax = (apiUrl, data, callback) => {
       if(status === `error`) { callback(json) }
 
       if(status === `success`) { callback(json) }  
+    })
+    .catch(err => {
+      callback({code: `error`, response: err})
     })
   }
   tryToAjax()

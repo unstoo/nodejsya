@@ -14,11 +14,3 @@ export default class Button extends Component {
     )
   }
 }
-
-
-
-// _____________________
-// |  FORM             |
-// | ________          |
-// | ________          |
-// ---------------------
