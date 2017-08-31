@@ -11,11 +11,11 @@ export default class App extends Component {
     this.state = {
       ajaxCallResult: 'none', // none,progress,error,success 
       formActionUrl: `/api/`,
-      validationErrorHiglight: false,
+      enableInputFieldsErrorHiglighting: false,
       inputFields: {
-        fio:{ validnessIndicator: true, value: ``},
-        email:{ validnessIndicator: true, value: ``},
-        phone:{ validnessIndicator: true, value: ``},
+        fio:{ validnessIndicator: false, value: ``},
+        email:{ validnessIndicator: false, value: ``},
+        phone:{ validnessIndicator: false, value: ``},
       }
     }
 
@@ -38,24 +38,27 @@ export default class App extends Component {
       validate() {
         const fields = thisComponent.state.inputFields        
         const errorFields = []
-
+        
         for(let key in fields) {                    
           if(fields[key].validnessIndicator === false)
            errorFields.push(key)
         }
+        
         console.log(`errorFields: `, errorFields)
         return {
           isValid: errorFields.length > 0 ? false : true,
           errorFields
         }
       },
+
       getData() {},
+      
       setData(object) {},
       
       // Метод submit выполняет валидацию полей и отправку ajax-запроса, 
       // если валидация пройдена. Вызывается по клику на кнопку отправить.
       submit() { 
-        console.log(thisComponent.buttonClickHandler()) 
+        thisComponent.buttonClickHandler()
       }
     }
   }
@@ -66,18 +69,24 @@ export default class App extends Component {
       e.preventDefault()
     }
 
-    const areInputFieldsValuesValid = this.composeApiForConsole(this).validate().isValid    
+    const areInputFieldsValuesValid = this.composeApiForConsole(this).validate().isValid 
+
     areInputFieldsValuesValid ?
-    // ajax() 
-    console.log(true) 
-    :  this.setState({validationErrorHiglight: true})
+    () => {
+        console.log(`All set. Launching ajax.`) 
+        // Deactivate Button
+        // Send out ajax
+        // Listen for response
+        // Display response or retry if reponse has timedout.
+    }
+    :  this.setState({enableInputFieldsErrorHiglighting: true})
     // Если валидация не прошла, соответствующим инпутам должен добавиться класс error
     // с заданным стилем border: 1px solid red.
   }
 
   render() {
     const props = { 
-      errorHighlight: this.state.validationErrorHiglight, 
+      errorHighlight: this.state.enableInputFieldsErrorHiglighting, 
       inputFieldCallback: this.inputFieldCallback 
     }
 

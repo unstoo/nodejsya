@@ -96,8 +96,8 @@ const inputValueTypeCheck = {
     const validDomains = ["ya.ru", "yandex.ru", "yandex.ua", "yandex.by", "yandex.kz", "yandex.com"]
     let test = true    
     value = value.trim()
-
-    if (value.trim().length === 0) {
+    
+    if (!value.length) {
       return false
     }
 
@@ -118,8 +118,28 @@ const inputValueTypeCheck = {
     return test
   },
 
+  // начинается на +7, и имеет формат +7(999)999-99-99. 
+  // Кроме того, сумма всех цифр телефона не должна превышать 30
   phone(value) {
     let test = true
+    
+    if (!value.length) {
+      return false
+    }
+
+    if (!value.match(/^\+7\(\d{3}\)\d{3}-\d{2}-\d{2}$/g)) {
+      return false
+    }
+
+    const nonDigitSymbolsFreeArray = value.split(/\D/g).join('').split('')
+
+    const result = nonDigitSymbolsFreeArray.reduce((total, digit) => {
+      return Number(total) + Number(digit)
+    })
+
+    if (result > 30) {
+      return false
+    }
 
     return test
   }
