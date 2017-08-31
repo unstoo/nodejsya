@@ -40,7 +40,7 @@ module.exports = {
   plugins: [
     // Globals for the client surface.
     new webpack.DefinePlugin({
-      'DEVELOPMENT': JSON.stringify(process.env.NODE_ENV === 'development')
+      'FORM_SUBMISSION_API_URL': ''
     }),
     // enable HMR globally
     new webpack.HotModuleReplacementPlugin(),

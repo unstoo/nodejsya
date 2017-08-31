@@ -42,6 +42,12 @@ module.exports = {
   },
 
   plugins: [
+    // new webpack.DefinePlugin({
+    //   'DEVELOPMENT': JSON.stringify(process.env.NODE_ENV === 'development')
+    // }),
+    new webpack.DefinePlugin({
+      'FORM_SUBMISSION_API_URL': JSON.stringify(process.env.FORM_SUBMISSION_API_URL)
+    }),
     new webpack.optimize.UglifyJsPlugin({
       sourceMap: true,
       comments: false

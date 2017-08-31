@@ -3,14 +3,12 @@ import ReactDOM from 'react-dom'
 import { AppContainer } from 'react-hot-loader'
 import App from './App'
 
-let formSubmitApiPoint = `/your/api/point/url`
+// FORM_SUBMISSION_API_URL set by webpack.DefinePlugin()
+// Edit the url in package.json
+// Will use json json stubs in 'npm start' mode.
+// See tryToAjax() in './App/index.jsx'
+let formSubmitApiPoint = FORM_SUBMISSION_API_URL
 
-// DEVELOPMNENT set by webpack.DefinePlugin()
-if (DEVELOPMENT === true) {  
-  // Purge API url in order to use json stubs instead.
-  // See tryToAjax() in './App/index.jsx'
-  formSubmitApiPoint = `` 
-}
 
 const rootEl = document.getElementById('root')
 
