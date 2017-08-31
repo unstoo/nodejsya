@@ -27,6 +27,12 @@ export default class InputField extends Component {
     this.props.inputFieldCallback(inputFieldName, isInputValueValid, inputValue)
   }
 
+  componentWillReceiveProps(nextProps){
+    if(this.state.inputValue !== nextProps.value) {
+      this.setState({inputValue: nextProps.value})
+    }
+  }
+
   render() {
     const applyStyle = {}
     if (this.props.errorHighlight && !this.state.isInputValueValid) {
@@ -123,9 +129,7 @@ const inputValueTypeCheck = {
   phone(value) {
     let test = true
     
-    if (!value.length) {
-      return false
-    }
+    
 
     if (!value.match(/^\+7\(\d{3}\)\d{3}-\d{2}-\d{2}$/g)) {
       return false

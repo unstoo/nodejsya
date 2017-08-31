@@ -25,7 +25,7 @@ const styleModefier = {
     borderBottom: `3px solid red`
   },
   progress: {
-    borderBottom: `3px solid silver`
+    borderBottom: `3px solid black`
   },
   none: {
     borderBottom: `none`

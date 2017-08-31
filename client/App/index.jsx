@@ -44,9 +44,8 @@ export default class App extends Component {
         for(let key in fields) {                    
           if(fields[key].validnessIndicator === false)
            errorFields.push(key)
-        }
+        }        
         
-        console.log(`errorFields: `, errorFields)
         return {
           isValid: errorFields.length > 0 ? false : true,
           errorFields
@@ -56,8 +55,8 @@ export default class App extends Component {
       // Метод getData возвращает объект с данными формы, где имена свойств совпадают с именами инпутов
       getData() {
         const dataObject = {}
-        console.log('getData()', thisComponent)
         const {inputFields} = thisComponent.state
+
         for(let key in inputFields) {
           dataObject[key] = inputFields[key].value
         }
@@ -65,13 +64,15 @@ export default class App extends Component {
         return dataObject
       },
       
+      // Метод setData принимает объект с данными формы и устанавливает их инпутам формы. 
+      // Поля кроме phone, fio, email игнорируются.
       setData(dataObject) {
         const { fio, email, phone } = dataObject
         const stateChunk = Object.assign({}, thisComponent.state.inputFields)
         stateChunk.fio.value = fio
-        stateChunk.fio.value = email
-        stateChunk.fio.value = phone
-
+        stateChunk.email.value = email
+        stateChunk.phone.value = phone
+        
         thisComponent.setState({inputFields: stateChunk})
       },
       
@@ -93,13 +94,13 @@ export default class App extends Component {
     const areInputFieldsValuesValid = this.composeApiForConsole(this).validate().isValid 
 
     if (areInputFieldsValuesValid) {
-      // Disable submit button; Launch spinner animation;
+      // Disable submit button
       const newState = Object.assign({}, this.state)
       newState.disableFormButton = true
       newState.ajaxFormSubmissionStage = {code: 'listening', msg: ''}
       this.setState(newState)
 
-      // Send data; wait for response; Stop spinner animation;
+      // AJAX API; wait for response;
       submitFormDataByAjax(this.state.submitFormToUrl, 
         {
           fio: newState.inputFields.fio.value,
@@ -123,13 +124,14 @@ export default class App extends Component {
   }
 
   render() {
+    
     const props = { 
       errorHighlight: this.state.enableInputFieldsErrorHiglighting, 
       inputFieldCallback: this.inputFieldCallback 
     }
 
     const fields = this.state.inputFields
-
+    
     return (
       <FormLayout>
         <form action={this.actionUrl}>
@@ -173,6 +175,7 @@ const submitFormDataByAjax = (apiUrl, data, callback) => {
       
       if(status === `progress`) {
         setTimeout(tryToAjax, json.timeout)
+        callback(json)
       }
 
       if(status === `error`) { callback(json) }
