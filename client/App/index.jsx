@@ -97,7 +97,6 @@ export default class App extends Component {
       // Disable submit button
       const newState = Object.assign({}, this.state)
       newState.disableFormButton = true
-      newState.ajaxFormSubmissionStage = {code: 'listening', msg: ''}
       this.setState(newState)
 
       // AJAX API; wait for response;

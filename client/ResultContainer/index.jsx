@@ -7,7 +7,7 @@ export default class ResultContainer extends Component {
     const response = this.props.ajaxResponse
     return (    
       <div className={style.ResultContainer} style={styleModefier[response.status]} id="resultContainer">
-        Результат: 
+        Результат:&nbsp;
         <span className={style.ResultCodeDisplay}>
           { response.status }
           { response.reason ? ` ` + response.reason : `` }

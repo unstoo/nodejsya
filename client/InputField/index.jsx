@@ -27,9 +27,14 @@ export default class InputField extends Component {
     this.props.inputFieldCallback(inputFieldName, isInputValueValid, inputValue)
   }
 
-  componentWillReceiveProps(nextProps){
-    if(this.state.inputValue !== nextProps.value) {
-      this.setState({inputValue: nextProps.value})
+  componentWillReceiveProps(nextProps){    
+    const inputValue = nextProps.value    
+    const inputFieldName = this.props.name
+    // Данные пришли от MyForm.setData(Object) -> App.setState() -> here
+    if(this.state.inputValue !== inputValue) {
+      const isInputValueValid = this.valueCheck(inputValue)
+      this.setState({inputValue, isInputValueValid})      
+      this.props.inputFieldCallback(inputFieldName, isInputValueValid, inputValue)
     }
   }
 
