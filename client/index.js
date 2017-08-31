@@ -3,16 +3,14 @@ import ReactDOM from 'react-dom'
 import { AppContainer } from 'react-hot-loader'
 import App from './App'
 
-
 let formSubmitApiPoint = `/your/api/point/url`
 
-if (DEVELOPMENT === true) {
-  console.log(`yay DEVELOPMENT mode is on`)
+// DEVELOPMNENT set by webpack.DefinePlugin()
+if (DEVELOPMENT === true) {  
   // Purge API url in order to use json stubs instead.
   // See tryToAjax() in './App/index.jsx'
   formSubmitApiPoint = `` 
 }
-
 
 const rootEl = document.getElementById('root')
 
