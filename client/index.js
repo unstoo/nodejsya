@@ -7,7 +7,7 @@ import App from './App'
 // Edit the url in package.json
 // Will use json json stubs in 'npm start' mode.
 // See tryToAjax() in './App/index.jsx'
-let formSubmitApiPoint = FORM_SUBMISSION_API_URL
+let formSubmitApiPoint = (FORM_SUBMISSION_API_URL ? FORM_SUBMISSION_API_URL : '')
 
 
 const rootEl = document.getElementById('root')
