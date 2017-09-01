@@ -39,13 +39,13 @@ export default class InputField extends Component {
   }
 
   render() {
-    const applyStyle = {}
+    let applyStyles = [style.InputField]
     if (this.props.errorHighlight && !this.state.isInputValueValid) {
-      applyStyle.border = `1px solid red`
+      applyStyles.push(style.error)
     }
 
     return (
-      <div className={style.InputFieldLayout } style={applyStyle}>
+      <div className={style.InputFieldLayout}>
         <label className={style.InputLabel}> 
           {this.props.label}
         </label>
@@ -54,7 +54,7 @@ export default class InputField extends Component {
          name={this.props.name} 
          onChange={this.handleInputChange} 
          value={this.state.inputValue}
-         className={style.InputField}
+         className={applyStyles.join(' ')}
         />
       </div>
     )
